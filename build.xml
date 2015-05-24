@@ -8,7 +8,7 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="Shaka" default="default" basedir=".">
-    <description>Builds, tests, and runs the project DrTetris.</description>
+    <description>Builds, tests, and runs the project Shaka.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -83,7 +83,7 @@
             <fileset dir="natives"/>
         </copy>
         
-        <zip destfile="${dist.dir}/Siranga.zip">
+        <zip destfile="${dist.dir}/Shaka.zip">
             <fileset dir="${dist.dir}"/>
         </zip>
     </target>

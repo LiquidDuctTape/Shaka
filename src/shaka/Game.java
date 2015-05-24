@@ -6,13 +6,15 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Game implements GameState {
 
-	private Image background, shaka;
-	private float x, y;
+	private Image background;
+	private SpriteSheet shaka;
+	private float x, y, speed;
 	
 	@Override
 	public int getID() {
@@ -22,7 +24,7 @@ public class Game implements GameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		background = new Image(ShakaMap.BACKGROUNDIMAGE);
-		shaka = new Image(ShakaMap.SHAKAIMAGE);
+		shaka = new SpriteSheet(ShakaMap.SHAKAIMAGE, 96, 96);
 		x = gc.getWidth() / 2;
 		y = gc.getHeight() / 2;
 	}
@@ -30,25 +32,39 @@ public class Game implements GameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
 		background.draw();
-		shaka.draw(x, y);
+		shaka.getSprite(speed == 0 ? 0 : 1, 0).draw(x, y);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if (gc.getInput().isKeyDown(Input.KEY_W)) {
-			y -= delta * 2;
-		}
-		
-		if (gc.getInput().isKeyDown(Input.KEY_S)) {
-			y += delta * 2;
+		if (gc.getInput().isKeyPressed(Input.KEY_W)) {
+			if (y == gc.getHeight() - shaka.getSprite(0, 0).getHeight()) {
+				speed = -1f;
+			}
 		}
 		
 		if (gc.getInput().isKeyDown(Input.KEY_A)) {
-			x -= delta * 2;
+			x -= delta * .5;
 		}
 		
 		if (gc.getInput().isKeyDown(Input.KEY_D)) {
-			x += delta * 2;
+			x += delta * .5;
+		}
+		
+		y += speed * delta;
+		speed += .05;
+		
+		if (x < 0) {
+			x = 0;
+		} else if (x > gc.getWidth() - shaka.getSprite(0, 0).getWidth()) {
+			x = gc.getWidth() - shaka.getSprite(0, 0).getWidth();
+		}
+		
+		if (y < 0) {
+			y = 0;
+		} else if (y >= gc.getHeight() - shaka.getSprite(0, 0).getHeight()) {
+			y = gc.getHeight() - shaka.getSprite(0, 0).getHeight();
+			speed = 0;
 		}
 	}
 
