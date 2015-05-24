@@ -1,6 +1,8 @@
 
 package shaka;
 
+import static java.lang.System.gc;
+import net.java.games.input.Component;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -15,6 +17,7 @@ public class Game implements GameState {
 	private Image background;
 	private SpriteSheet shaka;
 	private float x, y, speed;
+        private boolean close;
 	
 	@Override
 	public int getID() {
@@ -66,6 +69,9 @@ public class Game implements GameState {
 			y = gc.getHeight() - shaka.getSprite(0, 0).getHeight();
 			speed = 0;
 		}
+                if (close) {
+                    gc.exit();
+                }
 	}
 
 	@Override
@@ -130,7 +136,13 @@ public class Game implements GameState {
 
 	@Override
 	public void keyPressed(int i, char c) {
-		
+            switch (i) {
+                case Input.KEY_ESCAPE: close = true;
+                    
+                    break;
+                default:
+                    throw new AssertionError();
+            }
 	}
 
 	@Override
