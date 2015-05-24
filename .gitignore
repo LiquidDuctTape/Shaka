@@ -1,5 +1,8 @@
 build/
 nbproject/
+dist/
+natives/
+lib/
 manifest.mf
 
 # Compiled source #

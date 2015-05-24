@@ -23,7 +23,7 @@ public class Shaka extends StateBasedGame {
 
 		try {
 			AppGameContainer app = new AppGameContainer(new Shaka());
-			app.setDisplayMode(800, 600, false);
+			app.setDisplayMode(1920, 1080, true);
 			app.setTargetFrameRate(60);
 			app.setShowFPS(false);
 			app.start();
