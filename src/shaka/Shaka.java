@@ -1,7 +1,5 @@
 package shaka;
 
-import java.io.File;
-import org.lwjgl.LWJGLUtil;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -18,9 +16,6 @@ public class Shaka extends StateBasedGame {
 	}
 	
 	public static void main(String[] args) {
-		System.setProperty("org.lwjgl.librarypath", new File(new File(System.getProperty("user.dir"), "natives"), LWJGLUtil.getPlatformName()).getAbsolutePath());
-		System.setProperty("net.java.games.input.libarypath", System.getProperty("org.lwjgl.librarypath"));
-
 		try {
 			AppGameContainer app = new AppGameContainer(new Shaka());
 			app.setDisplayMode(1920, 1080, true);
@@ -33,6 +28,6 @@ public class Shaka extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-		
+		addState(new Game());
 	}
 }

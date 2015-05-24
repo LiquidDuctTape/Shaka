@@ -2,7 +2,7 @@ build/
 nbproject/
 dist/
 natives/
-lib/
+libs/
 manifest.mf
 
 # Compiled source #

@@ -35,20 +35,20 @@ public class Game implements GameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if (gc.getInput().isKeyPressed('W')) {
-			y -= delta * 5;
+		if (gc.getInput().isKeyDown(Input.KEY_W)) {
+			y -= delta * 2;
 		}
 		
-		if (gc.getInput().isKeyPressed('S')) {
-			y += delta * 5;
+		if (gc.getInput().isKeyDown(Input.KEY_S)) {
+			y += delta * 2;
 		}
 		
-		if (gc.getInput().isKeyPressed('A')) {
-			x -= delta * 5;
+		if (gc.getInput().isKeyDown(Input.KEY_A)) {
+			x -= delta * 2;
 		}
 		
-		if (gc.getInput().isKeyPressed('D')) {
-			x += delta * 5;
+		if (gc.getInput().isKeyDown(Input.KEY_D)) {
+			x += delta * 2;
 		}
 	}
 
