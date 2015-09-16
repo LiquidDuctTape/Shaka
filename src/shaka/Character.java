@@ -1,9 +1,6 @@
 
 package shaka;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -18,19 +15,21 @@ import org.newdawn.slick.state.StateBasedGame;
 public abstract class Character {
 	
 	private final String file;
-	private final float jumpSpeed, moveSpeed;
+	private final float jumpSpeed, moveSpeed, friction, acceleration;
 	private final int jumps;
 	
 	private SpriteSheet character;
-	private float x = 0, y = 0, ySpeed = 0;
+	private float x = 0, y = 0, ySpeed = 0, xSpeed = 0;
 	private float jumpsUsed= 0;
-	private List<Hit> hits = new ArrayList<Hit>();
+	private Hit hit;
 	
-	public Character(String file, float jumpSpeed, float moveSpeed, int jumps) throws SlickException {
+	public Character(String file, float jumpSpeed, float moveSpeed, int jumps, float friction, float acceleration) throws SlickException {
 		this.file = file;
 		this.jumpSpeed = jumpSpeed;
 		this.moveSpeed = moveSpeed;
 		this.jumps = jumps;
+		this.friction = friction;
+		this.acceleration = acceleration;
 	}
 	
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -45,64 +44,49 @@ public abstract class Character {
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		
-		Iterator<Hit> iterator = hits.iterator();
-		while(iterator.hasNext()) {
-			Hit hit = iterator.next();
+		boolean stunned = false;
+		
+		if (isHit()) {
 			hit.update(delta);
 			if (hit.isDone(y == gc.getHeight() - character.getSprite(0, 0).getHeight(), x == gc.getWidth() - character.getSprite(0, 0).getWidth() || x == 0)) {
-				iterator.remove();
+				hit = null;
+			} else {
+				stunned =  hit.isStunned();
 			}
 		}
 		
-		boolean stunned = false;
-		double xForce = 0, yForce =0;
-		for (int i = 0; i < hits.size() && !stunned; i++) {
-			stunned =  hits.get(i).isStunned();
-			xForce += hits.get(i).getXForce();
-			yForce += hits.get(i).getYForce();
-		}
-		
 		if (!stunned) {
-			if (hits.isEmpty()) {
 				if (gc.getInput().isKeyPressed(Input.KEY_W) && jumpsUsed < jumps && ySpeed >= 0) {
 					ySpeed = jumpSpeed;
 					jumpsUsed++;
 				}
 
-				if (gc.getInput().isKeyDown(Input.KEY_S) && ySpeed < 0) {
-					y += delta * moveSpeed;
+				if (xSpeed > -moveSpeed && gc.getInput().isKeyDown(Input.KEY_A)) {
+					xSpeed -= acceleration * delta;
+					if (xSpeed < -moveSpeed) {
+						xSpeed = -moveSpeed;
+					}
 				}
 
-				if (gc.getInput().isKeyDown(Input.KEY_A)) {
-					x -= delta * moveSpeed;
+				if (xSpeed < moveSpeed && gc.getInput().isKeyDown(Input.KEY_D)) {
+					xSpeed += acceleration * delta;
+					if (xSpeed > moveSpeed) {
+						xSpeed = moveSpeed;
+					}
 				}
-
-				if (gc.getInput().isKeyDown(Input.KEY_D)) {
-					x += delta * moveSpeed;
-				}
-			} else {
-				if (gc.getInput().isKeyDown(Input.KEY_W)) {
-					yForce -= Math.abs(yForce) * .2;
-				}
-
-				if (gc.getInput().isKeyDown(Input.KEY_S)) {
-					yForce += Math.abs(yForce) * .2;
-				}
-
-				if (gc.getInput().isKeyDown(Input.KEY_A)) {
-					xForce -= Math.abs(xForce) * .2;
-				}
-
-				if (gc.getInput().isKeyDown(Input.KEY_D)) {
-					xForce += Math.abs(xForce) * .2;
-				}
-			}
 		}
 		
-		x += xForce * delta;
-		y += yForce * delta;
+		x += xSpeed * delta;
 		y += ySpeed * delta;
 		ySpeed += ShakaMap.GRAVITY * delta;
+		
+		if (xSpeed > friction * delta) {
+			xSpeed -= friction * delta;
+		} else if (xSpeed < -friction * delta) {
+			xSpeed += friction * delta;
+		} else {
+			xSpeed = 0;
+		}
 
 		if (x < 0) {
 			x = 0;
@@ -118,17 +102,23 @@ public abstract class Character {
 	}
 	
 	public void hit(Hit hit) {
-		hits.add(hit);
+		this.hit = hit;
+		xSpeed += hit.getXForce();
+		ySpeed += hit.getYForce();
+	}
+	
+	public boolean isHit() {
+		return hit != null;
 	}
 	
 	public void keyPressed(int i, char c) {
 		switch (i) {
 			case Input.KEY_E:
-				hit(new QHit(Math.PI / 2));
+				hit(new QHit(Math.PI / 3));
 				break;
 
 			case Input.KEY_Q:
-				hit(new EHit(0));
+				hit(new EHit(1.2*Math.PI));
 				break;
 		}
 	}

@@ -8,6 +8,6 @@ package shaka;
 public class EHit extends Hit {
 
 	public EHit(double direction) {
-		super(1000, 2, 200, direction);
+		super(400, 2, 200, direction);
 	}
 }

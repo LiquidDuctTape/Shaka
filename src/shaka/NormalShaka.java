@@ -9,6 +9,6 @@ import org.newdawn.slick.SlickException;
  */
 public class NormalShaka extends Character {
 	public NormalShaka() throws SlickException {
-		super(ShakaMap.SHAKAIMAGE, -1f, .5f, 3);
+		super(ShakaMap.SHAKAIMAGE, -1f, .5f, 3, .002f, .005f);
 	}
 }

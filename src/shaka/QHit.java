@@ -8,6 +8,6 @@ package shaka;
 public class QHit extends Hit {
 
 	public QHit(double direction) {
-		super(1000, 1, 200, direction);
+		super(200, 1, 0, direction);
 	}
 }

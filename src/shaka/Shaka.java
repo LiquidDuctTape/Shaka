@@ -26,7 +26,7 @@ public class Shaka extends StateBasedGame {
 			AppGameContainer app = new AppGameContainer(new Shaka());
 			app.setDisplayMode(1920, 1080, false);
 			app.setTargetFrameRate(60);
-			app.setShowFPS(false);
+			app.setShowFPS(true);
 			app.start();
 		} catch (SlickException e) {
 		}

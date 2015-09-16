@@ -1,7 +1,5 @@
 package shaka;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,7 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Game implements GameState {
 
-	private List<Character> characters = new ArrayList<Character>();
+	private final Character[] characters = new Character[8];
 	private Image background;
 	private boolean close;
 
@@ -28,17 +26,17 @@ public class Game implements GameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		background = new Image(ShakaMap.BACKGROUNDIMAGE);
-		characters.add(new NormalShaka());
-		for (Character character : characters) {
-			character.init(gc, sbg);
+		characters[0] = new NormalShaka();
+		for (int i = 0; i < characters.length && characters[i] != null; i++) {
+			characters[i].init(gc, sbg);
 		}
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		background.draw();
-		for (Character character : characters) {
-			character.render(gc, sbg, g);
+		for (int i = 0; i < characters.length && characters[i] != null; i++) {
+			characters[i].render(gc, sbg, g);
 		}
 	}
 
@@ -47,8 +45,8 @@ public class Game implements GameState {
 		if (close) {
 			gc.exit();
 		}
-		for (Character character : characters) {
-			character.update(gc, sbg, delta);
+		for (int i = 0; i < characters.length && characters[i] != null; i++) {
+			characters[i].update(gc, sbg, delta);
 		}
 	}
 
@@ -120,8 +118,8 @@ public class Game implements GameState {
 				break;
 		}
 		
-		for (Character character : characters) {
-			character.keyPressed(i, c);
+		for (int j = 0; j < characters.length && characters[j] != null; j++) {
+			characters[j].keyPressed(i, c);
 		}
 	}
 
